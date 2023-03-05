@@ -9,7 +9,12 @@ export const useAppNavigate = () => {
         navigate('/chat')
     }
 
+    const navigateHome = () => {
+        navigate('/home')
+    }
+
     return {
-        startNewChat
+        startNewChat,
+        navigateHome
     }
 }

@@ -1,18 +1,15 @@
 import { DownloadOutlined } from '@ant-design/icons';
 import { Button, Divider, Radio, Space } from 'antd';
 import { useState } from 'react';
-const MyButton = () => {
-  const [size, setSize] = useState('large'); // default is 'middle'
+import './Button.scss'
+
+const MyButton = ({title, onClick, type}) => {
 
   return (
     <>
-      <Space direction="vertical">
-        <Space wrap>
-          <Button type="primary" size={size}>
-            Primary
-          </Button>
-        </Space>
-      </Space>
+        <button onClick={onClick} className={`button ${"button_"+type}`}>
+          {title}
+        </button>
     </>
   );
 };
