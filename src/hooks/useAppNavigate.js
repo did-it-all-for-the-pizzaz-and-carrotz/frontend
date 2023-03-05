@@ -13,8 +13,18 @@ export const useAppNavigate = () => {
         navigate('/home')
     }
 
+    const navigateHelp = () => {
+        navigate('/help')
+    }
+
+    const goBack = () => {
+        navigate(-1);
+    }
+
     return {
         startNewChat,
-        navigateHome
+        navigateHome,
+        navigateHelp,
+        goBack
     }
 }

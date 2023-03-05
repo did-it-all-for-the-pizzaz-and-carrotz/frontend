@@ -128,9 +128,16 @@ export const messagesSlice = createSlice({
     name: 'messages',
     initialState,
     reducers: {
-
+        addMessage: (state, action) => {
+            return [
+                ...state,
+                action.payload
+            ]
+        }
     }
 })
+
+export const {addMessage} = messagesSlice.actions
 
 export const selectMessages = (state) => state.messages;
 

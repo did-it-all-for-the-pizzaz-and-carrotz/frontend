@@ -1,25 +1,68 @@
 import TextArea from 'antd/es/input/TextArea'
 import { selectMessages } from 'features/messages/messagesSlice';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './Chat.scss'
 import { SendOutlined } from '@ant-design/icons';
+import { addMessage } from 'features/messages/messagesSlice';
+import { v4 as uuid } from 'uuid'
+import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 
 const Chat = () => {
     const [currentMessage, setCurrentMessage] = useState('');
     const messages = useSelector(selectMessages)
+    const dispatch = useDispatch()
+    const user = useSelector(selectUser)
+    const [participient, setParticipient] = useState('Freddie Mercury')
 
     const handleSend = () => {
-        console.log(currentMessage)
+        if (currentMessage.length > 0) {
+            const date = new Date()
+
+            const messageObj = {
+                messageId: uuid(),
+                date: date.toString(),
+                content: currentMessage,
+                from: user.userType
+            }
+            dispatch(addMessage(messageObj))
+            setCurrentMessage('')
+        }
     }
 
     useEffect(() => {
         const wrapper = document.getElementsByClassName("chat_talk_wrapper")[0]
-        wrapper.scrollTop = 2139819832719827319827321983
+        wrapper.scrollTo({
+            top: 123123123123123123,
+            behavior: "smooth"
+        })
     }, [messages])
 
     return (
         <div className="chat">
+            <div 
+                style={{
+                    position:"absolute",
+                    top:"20px",
+                    right:"20px",
+                    cursor:"pointer"
+                }}
+                onClick={
+                    () => {
+                        const nextUser = user.userType === 'seeker' ? 'helper' : 'seeker'
+                        dispatch(setUser({
+                            userType: nextUser
+                        }))
+                    }
+                }
+            >
+                Zmien usera 
+            </div>
+
+            <header className="chat_header">
+                Rozmawiasz z {participient}
+            </header>
+
             <div className="chat_talk_wrapper">
                 {messages.map((message) => (
                     <div className="chat_message_line" key={message.messageId}>

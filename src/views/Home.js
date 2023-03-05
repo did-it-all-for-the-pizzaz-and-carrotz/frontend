@@ -6,11 +6,7 @@ import { Button } from 'antd'
 import './Home.scss'
 
 const Home = () => {
-    const { startNewChat } = useAppNavigate()
-
-    const handleOnClick = () => {
-        alert("asda")
-    }
+    const { startNewChat, navigateHelp } = useAppNavigate()
 
     return (
         <div className="home_choose">
@@ -19,7 +15,7 @@ const Home = () => {
                 <MyButton title="SZUKAM POMOCY" onClick={startNewChat} type="home_choose" />
             </div>
             <div className="home_choose_panel">
-                <MyButton title="CHĘTNIE POMOGĘ" onClick={startNewChat} type="home_choose" />
+                <MyButton title="CHĘTNIE POMOGĘ" onClick={navigateHelp} type="home_choose" />
             </div>
         </div>
     )

@@ -1,24 +1,21 @@
 import Chat from 'containers/Chat/Chat'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import './ChatSection.scss'
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import MyButton from 'components/Button/Button';
 import { useAppNavigate } from 'hooks/useAppNavigate';
+import TermsOfService from 'components/TermsOfService/TermsOfService';
+import ChatNav from 'components/ChatNav/ChatNav';
 const { Header, Content, Footer, Sider } = Layout;
 
 const ChatSection = () => {
-    const { navigateHome } = useAppNavigate()
+
 
     return (
         <div className="chat_view">
             <Chat />
-            <nav className="chat_view_navbar">
-                <h2>Informacje</h2>
-                <div>regulamin chatu</div>
-                <MyButton title="Powrót na stronę główną" type="regular" onClick={navigateHome}/>
-                <MyButton title="Zgłoś rozmówcę" type="regular_dark" />
-            </nav>
+            <ChatNav />
         </div>
 
         // <Layout>
