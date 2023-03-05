@@ -7,25 +7,53 @@ import { SendOutlined } from '@ant-design/icons';
 import { addMessage } from 'features/messages/messagesSlice';
 import { v4 as uuid } from 'uuid'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
+import useWebSocket from "react-use-websocket";
+
 
 const Chat = () => {
-    const [currentMessage, setCurrentMessage] = useState('');
-    const messages = useSelector(selectMessages)
-    const dispatch = useDispatch()
-    const user = useSelector(selectUser)
-    const [participient, setParticipient] = useState('Freddie Mercury')
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [chatroomUUID, setChatroomUUID] = useState("");
+  const [participient, setParticipient] = useState('Freddie Mercury');
+  const messages = useSelector(selectMessages);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+
+  const WS_URL = "ws://127.0.0.1:8081";
+
+  const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
+    onOpen: () => {
+      console.log("WebSocket connection established.");
+      sendJsonMessage({
+        topic: "createChatroom",
+        payload: {},
+      });
+    },
+    onClose: () => {},
+    onMessage: (event) => {
+      const { chatroomUUID } = JSON.parse(event.data);
+      setChatroomUUID(chatroomUUID); // TODO set it in reducer to persist state after dispatch
+    },
+  });
 
     const handleSend = () => {
         if (currentMessage.length > 0) {
-            const date = new Date()
+            console.log(currentMessage);
+            sendJsonMessage({
+                topic: "onMessage",
+                payload: {
+                    chatroomUuid: chatroomUUID,
+                    message: currentMessage,
+                },
+            });
 
-            const messageObj = {
-                messageId: uuid(),
-                date: date.toString(),
+            const message = {
+                messageId: Math.random(),
+                date: '29/02/2023', // TODO TO DO
                 content: currentMessage,
-                from: user.userType
+                from: 'seeker'
             }
-            dispatch(addMessage(messageObj))
+
+            dispatch(addMessage(message, chatroomUUID))
             setCurrentMessage('')
         }
     }
@@ -36,11 +64,11 @@ const Chat = () => {
             top: 123123123123123123,
             behavior: "smooth"
         })
-    }, [messages])
+    }, [messages]);
 
     return (
         <div className="chat">
-            <div 
+            <div
                 style={{
                     position:"absolute",
                     top:"20px",
@@ -56,7 +84,7 @@ const Chat = () => {
                     }
                 }
             >
-                Zmien usera 
+                Zmien usera
             </div>
 
             <header className="chat_header">

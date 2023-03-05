@@ -1,12 +1,11 @@
 import Chat from 'containers/Chat/Chat'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import './ChatSection.scss'
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import MyButton from 'components/Button/Button';
 import { useAppNavigate } from 'hooks/useAppNavigate';
-import TermsOfService from 'components/TermsOfService/TermsOfService';
-import ChatNav from 'components/ChatNav/ChatNav';
+import ChatNav from "../components/ChatNav/ChatNav";
 const { Header, Content, Footer, Sider } = Layout;
 
 const ChatSection = () => {
