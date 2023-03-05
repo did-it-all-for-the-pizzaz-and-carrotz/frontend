@@ -1,0 +1,18 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *::after, *::before {
+    box-sizing: inherit;
+    /* outline: 1px solid red; */
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+a, button {
+    font-family: 'Montserrat', sans-serif;
+}

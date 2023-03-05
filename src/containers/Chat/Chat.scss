@@ -1,0 +1,51 @@
+.chat_input_wrapper {
+    position: relative;
+    width:80%;
+    height:100px;
+    background-color: red;
+    padding:10px;
+}
+
+.chat_message {
+    background-color: green;
+    border-radius: 20px;
+    padding:10px;
+    position: absolute;
+    max-width: 75%;
+
+    &_line {
+        width:100%;
+        min-height:50px;
+        position: relative;
+    }
+
+    &_seeker {
+        right:0;
+        background-color: blue;
+    }
+
+    &_helper {
+        left:0;
+    }
+}
+
+.chat_talk_wrapper {
+    width:80%;
+    height:500px;
+    background-color: #D6E4FF;
+    overflow-y: scroll;
+}
+
+.chat_input {
+    width: 100%;
+    position: relative;
+    bottom:0;
+}
+
+.chat_send {
+    width:20px;
+    height: 20px;
+    position: absolute;
+    right:-10px;
+    transform: translate(-100%);
+}
