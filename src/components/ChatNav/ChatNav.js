@@ -25,4 +25,4 @@ const ChatNav = () => {
     )
 }
 
-export default ChatNav
+export default ChatNav;
