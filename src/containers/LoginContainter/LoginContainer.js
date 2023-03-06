@@ -3,8 +3,16 @@ import Form from 'components/Form/Form'
 import './LoginContainer.scss'
 import GoBack from 'components/GoBack/GoBack'
 import { Modal } from 'antd'
+import { useSelector } from 'react-redux'
+import { selectUser } from 'features/currentUser/currentUserSlice'
+import { Navigate } from 'react-router-dom'
 
 const LoginContainer = ({mode }) => {
+    const user = useSelector(selectUser)
+
+    if (user.userType ==="helper") return (
+        <Navigate replace to="/dashboard" />
+    )
 
     return (
         <div className="login_container">
