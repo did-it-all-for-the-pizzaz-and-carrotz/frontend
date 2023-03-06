@@ -21,6 +21,10 @@ export const useAppNavigate = () => {
         navigate('/dashboard')
     }
 
+    const navigateHelperChat = (chatroomId) => {
+        navigate('/helperChat', { state: { chatroomId } })
+    }
+
     const goBack = () => {
         navigate(-1);
     }
@@ -30,6 +34,7 @@ export const useAppNavigate = () => {
         navigateHome,
         navigateHelp,
         navigateDashboard,
+        navigateHelperChat,
         goBack
     }
 }

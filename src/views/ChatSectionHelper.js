@@ -13,13 +13,17 @@ import { v4 as uuid } from 'uuid'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from 'features/API';
+import { useLocation } from 'react-router';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const ChatSection = () => {
+const ChatSectionHelper = () => {
     const [chatroomUUID, setChatroomUUID] = useState("");
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const {state} = useLocation()
+
+    console.log(state)
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {
@@ -83,4 +87,4 @@ const ChatSection = () => {
     )
 }
 
-export default ChatSection
+export default ChatSectionHelper
