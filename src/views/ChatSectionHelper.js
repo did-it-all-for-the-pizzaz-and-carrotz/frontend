@@ -25,10 +25,17 @@ const ChatSectionHelper = () => {
     const user = useSelector(selectUser);
     const [disconnected, setDisconnected] = useState(false)
     const {navigateHome} = useAppNavigate()
+    const {messages} = useSelector(selectMessages)
 
     useEffect(() => {
         setChatroomUUID(state.chatroomId)
     }, [state])
+
+    useEffect(() => {
+        setInterval(() => {
+            console.log("ChatSectionHelper",chatroomUUID)
+        },3000)
+    },[])
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {

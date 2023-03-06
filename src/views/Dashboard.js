@@ -104,7 +104,7 @@ const Dashboard = () => {
                     ))}
                 </div>
             </div>
-            <footer className='dashboard_footer'>HelpMe</footer>
+            {/* <footer className='dashboard_footer'>HelpMe</footer> */}
         </div>
     )
 }

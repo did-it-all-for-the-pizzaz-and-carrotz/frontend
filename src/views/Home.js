@@ -4,7 +4,7 @@ import { useAppNavigate } from 'hooks/useAppNavigate'
 import MyButton from 'components/Button/Button'
 import {Button, Modal} from 'antd'
 import './Home.scss'
-import background from '../assets/hands.jpg'
+import background from '../assets/images/chat_background_opacity.png'
 
 const Home = () => {
     const { startNewChat, navigateHelp } = useAppNavigate()
@@ -35,6 +35,8 @@ const Home = () => {
         <div className="home_choose">
             <div className="home_choose_panel" style={{
                 backgroundImage: `url(${background})`,
+                backgroundSize:"cover",
+                backgroundPosition: "center",
                 borderRadius: '20px',
                 marginRight: '10px'
             }}>

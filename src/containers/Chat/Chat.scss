@@ -54,6 +54,7 @@
     &:active {
         transform: scale(0.9);
     }
+
 }
 
 .chat_message {
@@ -87,7 +88,10 @@
 
 .chat_talk_wrapper {
     height:80%;
-    background-color: #D6E4FF;
+    background: url('../../assets/images/chat_background_opacity.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     overflow-y: scroll;
 
     -ms-overflow-style: none;  /* IE and Edge */
