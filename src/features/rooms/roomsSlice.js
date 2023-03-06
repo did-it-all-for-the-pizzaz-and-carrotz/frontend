@@ -146,9 +146,26 @@ export const roomsSlice = createSlice({
     name: 'rooms',
     initialState,
     reducers: {
-        
+        setChatroom: (state, action) => {
+            return action.payload
+        },
+        addChatroom: (state, action ) => {
+            return [
+                ...state,
+                {
+                    roomId: action.payload,
+                    messages: [],
+                    isAdult: false,
+                }
+            ] 
+        },
+        removeChatroom: (state, action) => {
+            return state.filter(({roomId}) =>  roomId !== action.payload )
+        }
     }
 })
+
+export const {setChatroom, addChatroom, removeChatroom} = roomsSlice.actions
 
 export const selectRooms = (state) => state.rooms;
 

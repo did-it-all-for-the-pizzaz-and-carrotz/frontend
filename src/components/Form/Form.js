@@ -13,9 +13,9 @@ const LoginForm = ({ mode }) => {
   const {navigateDashboard} = useAppNavigate()
 
   useEffect(() => {
+    console.log(user.status)
     if (user.status === "succeeded") {
       console.log(user.token)
-      localStorage.setItem('token', user.token);
       navigateDashboard();
     }
 
