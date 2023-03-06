@@ -1,6 +1,6 @@
 import GoBack from 'components/GoBack/GoBack'
 import { selectRooms } from 'features/rooms/roomsSlice'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './Dashboard.scss'
 import RoomCard from 'components/RoomCard/RoomCard'
@@ -12,24 +12,27 @@ import { logOut } from 'features/currentUser/currentUserSlice'
 import useWebSocket from "react-use-websocket";
 import { setChatroom } from 'features/rooms/roomsSlice'
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
-
-const WS_URL = "ws://127.0.0.1:8081";
-
-import { Navigate } from 'react-router-dom'
-import {logOut} from 'features/currentUser/currentUserSlice'
-import useWebSocket from "react-use-websocket";
-
+import { WS_URL } from 'features/API'
+import { setChatrooms } from 'features/rooms/roomsSlice'
 
 const Dashboard = () => {
     // const { sendJsonMessage } = useSocket()
     const { navigateHome } = useAppNavigate()
     const user = useSelector(selectUser)
     const dispatch = useDispatch()
+    const {navigateHelperChat} = useAppNavigate()
 
     const rooms = useSelector(selectRooms)
 
-    const WS_URL = "ws://127.0.0.1:8081";
 
+    useEffect(() => {
+        console.log(rooms)
+    },[rooms])
+
+    const openChatroom = (chatroomID) => {
+        console.log("dashboard openChatroom",chatroomID)
+        navigateHelperChat(chatroomID)
+    }
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {
@@ -47,10 +50,10 @@ const Dashboard = () => {
         },
         onMessage: (event) => {
             const { payload, topic } = JSON.parse(event.data);
-            console.log(event);
+            console.log(payload);
             switch(topic) {
                 case "FETCH_ROOMS":
-                    console.log(payload);
+                    dispatch(setChatrooms(payload))
                     break;
             }
         },
@@ -89,12 +92,13 @@ const Dashboard = () => {
                     <span>Ostatnia wiadomość</span>
                 </header>
                 <div className="dashboard_rooms_container">
-                    {rooms.map(({ roomId, messages, isAdult }) => (
+                    {rooms.map(({ date, chatroomUUID, title, age }) => (
                         <RoomCard
-                            key={roomId}
-                            date={messages[0].date}
-                            content={messages[0].content}
-                            isAdult={isAdult}
+                            key={chatroomUUID}
+                            date={date}
+                            content={title}
+                            isAdult={age}
+                            onClick={()=> openChatroom(chatroomUUID)}
                         />
                     ))}
                 </div>

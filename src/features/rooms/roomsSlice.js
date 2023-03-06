@@ -3,151 +3,20 @@ import { RootState } from 'store/store';
 
 const initialState = [
     {
-        roomId:12398123,
-        messages: [
-            {
-                messageId: 0,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-            {
-                messageId: 35,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-        ],
-        isAdult: true
+        chatRoomUUID: 0,
+        date: "2/2/2",
+        title: "Help, I need somebody, heeelp. not just anyboooody",
+        age: false
     },
-    {
-        roomId:9349384,
-        messages: [
-            {
-                messageId: 0,
-                date: '29/02/2023',
-                content: 'I really need help with asdjasd',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-        ],
-        isAdult: false
-    },
-    {
-        roomId:12313221,
-        messages: [
-            {
-                messageId: 0,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-            {
-                messageId: 35,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-        ],
-        isAdult: true
-    },
-    {
-        roomId:123123213,
-        messages: [
-            {
-                messageId: 0,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-            {
-                messageId: 35,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-        ],
-        isAdult: true
-    },
-    {
-        roomId:12398123,
-        messages: [
-            {
-                messageId: 0,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-            {
-                messageId: 35,
-                date: '29/02/2023',
-                content: 'Hello',
-                from: 'helper'
-            },
-            {
-                messageId: 1,
-                date: '29/02/2023',
-                content: 'Never gonna give you up',
-                from: 'seeker'
-            },
-        ],
-        isAdult: true
-    },
+
 ];
 
 export const roomsSlice = createSlice({
     name: 'rooms',
     initialState,
     reducers: {
-        setChatroom: (state, action) => {
-            return action.payload
+        setChatrooms: (state, action) => {
+            return action.payload.rooms
         },
         addChatroom: (state, action ) => {
             return [
@@ -165,7 +34,7 @@ export const roomsSlice = createSlice({
     }
 })
 
-export const {setChatroom, addChatroom, removeChatroom} = roomsSlice.actions
+export const {setChatrooms, addChatroom, removeChatroom} = roomsSlice.actions
 
 export const selectRooms = (state) => state.rooms;
 

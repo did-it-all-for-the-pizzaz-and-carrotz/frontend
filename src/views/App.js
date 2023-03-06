@@ -8,6 +8,7 @@ import "./App.scss";
 import LoginContainer from 'containers/LoginContainter/LoginContainer';
 import HelpSection from 'containers/HelpSection/HelpSection'
 import Dashboard from './Dashboard';
+import ChatSectionHelper from './ChatSectionHelper'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/chat" element={<ChatSection />} />
+        <Route path="/helperChat" element={<ChatSectionHelper />} />
         <Route path="/login" element={<LoginContainer />} />
         <Route path="/help" element={<HelpSection />} />
         <Route path="/dashboard" element={<Dashboard />} />
