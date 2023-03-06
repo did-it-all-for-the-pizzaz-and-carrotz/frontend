@@ -85,7 +85,8 @@ const ChatSection = () => {
             switch (res.topic) {
                 case 'GAIN_ACCESS':
                     // const { chatroomUuid } = JSON.parse(event.data);
-                    setChatroomUUID(ret.chatroomUUID);
+                    console.log(ret)
+                    setChatroomUUID(ret.chatroomUuid);
                     break;
                 case 'MESSAGE':
 
@@ -122,6 +123,7 @@ const ChatSection = () => {
 
 
     const handleSend = (currentMessage) => {
+        console.log(chatroomUUID)
         if (currentMessage.length > 0) {
             console.log(currentMessage);
             sendJsonMessage({
@@ -135,7 +137,7 @@ const ChatSection = () => {
             const messageObj = {
                 messageId: uuid(),
                 content: currentMessage,
-                from: user.userType
+                from: "seeker"
             }
 
             dispatch(addMessage(messageObj, chatroomUUID))

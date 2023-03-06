@@ -43,7 +43,7 @@ const ChatSectionHelper = () => {
             sendJsonMessage({
                 topic: "helperEnteredChatroom",
                 payload: {
-                    chatroomUUID,
+                    chatroomUuid: chatroomUUID,
                 },
             });
         },
