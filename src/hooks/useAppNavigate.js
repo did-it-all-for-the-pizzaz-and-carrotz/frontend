@@ -17,6 +17,10 @@ export const useAppNavigate = () => {
         navigate('/help')
     }
 
+    const navigateDashboard = () => {
+        navigate('/dashboard')
+    }
+
     const goBack = () => {
         navigate(-1);
     }
@@ -25,6 +29,7 @@ export const useAppNavigate = () => {
         startNewChat,
         navigateHome,
         navigateHelp,
+        navigateDashboard,
         goBack
     }
 }

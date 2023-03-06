@@ -1,9 +1,31 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from 'store/store';
+import { getUser, registerUser } from './currentUserAPI';
 
 const initialState = {
-    userType: 'seeker'
+    userType: 'seeker',
+    status: 'idle',
+    token: ''
 }
+
+export const signIn = createAsyncThunk(
+    'currentUser/signIn',
+    async (loginData) => {
+        const response = await getUser(loginData);
+        console.log(response)
+        return response.data;
+    }
+);
+
+export const register = createAsyncThunk(
+    'currentUser/register',
+    async (registerData) => {
+        const response = await registerUser(registerData);
+        console.log(response)
+        return response.data;
+    }
+);
 
 export const currentUserSlice = createSlice({
     name: 'user',
@@ -11,11 +33,44 @@ export const currentUserSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             return action.payload
+        },
+        logOut: (state) => {
+            return {
+                userType: 'seeker',
+                status: 'idle',
+                token: ''
+            }
         }
-    }
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(signIn.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(signIn.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.userType = 'helper';
+                console.log(action)
+                state.token = action.payload.token;
+            })
+            .addCase(signIn.rejected, (state, action) => {
+                state.status = 'failed';
+            })
+            .addCase(register.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.userType = 'helper'
+                state.token = action.payload.token;
+            })
+            .addCase(register.rejected, (state, action) => {
+                state.status = 'failed';
+            })
+    },
 })
 
-export const { setUser } = currentUserSlice.actions
+export const { setUser, logOut } = currentUserSlice.actions
 
 export const selectUser = (state) => state.user;
 
