@@ -37,7 +37,7 @@ const ChatSection = () => {
             switch (event.topic) {
                 case 'GAIN_ACCESS':
                     const { chatroomUuid } = JSON.parse(event.data);
-                    setChatroomUUID(event.chatroomUuid)
+                    setChatroomUUID(chatroomUuid)
                     break;
                 case 'MESSAGE':
                     const { message } = JSON.parse(event.data);
@@ -49,6 +49,9 @@ const ChatSection = () => {
                     }
 
                     dispatch(addMessage(messageObj))
+                    break;
+                case 'HELPER_ENTERED':
+
                 default:
             }
         },

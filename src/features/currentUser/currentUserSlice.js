@@ -34,7 +34,7 @@ export const currentUserSlice = createSlice({
         setUser: (state, action) => {
             return {
                 ...state,
-                userType: action.payload,
+                userType: action.payload.userType,
             }
         },
         logOut: (state) => {

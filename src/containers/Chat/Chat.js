@@ -76,9 +76,9 @@ const Chat = ({ handleSend }) => {
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value)}
                 />
-                <div className="chat_send" onClick={handleSendMessage}>
+                <button className="chat_send" onClick={handleSendMessage}>
                     <SendOutlined />
-                </div>
+                </button>
             </div>
         </div>
     )

@@ -94,6 +94,7 @@ const Dashboard = () => {
                 <div className="dashboard_rooms_container">
                     {rooms.map(({ date, chatroomUUID, title, age }) => (
                         <RoomCard
+                            id={chatroomUUID}
                             key={chatroomUUID}
                             date={date}
                             content={title}

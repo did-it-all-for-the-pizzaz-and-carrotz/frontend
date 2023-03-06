@@ -1,7 +1,7 @@
 import './ChatSection.scss'
 import Chat from 'containers/Chat/Chat'
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { Layout, Menu, Modal, Space, theme } from 'antd';
 import MyButton from 'components/Button/Button';
 import { useAppNavigate } from 'hooks/useAppNavigate';
 import ChatNav from "../components/ChatNav/ChatNav";
@@ -14,33 +14,36 @@ import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from 'features/API';
 import { useLocation } from 'react-router';
+import GoBack from 'components/GoBack/GoBack';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const ChatSectionHelper = () => {
-    const [chatroomUUID, setChatroomUUID] = useState("");
+    const { state } = useLocation()
+    const [chatroomUUID, setChatroomUUID] = useState(state.chatroomId);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const {state} = useLocation()
+    const [disconnected, setDisconnected] = useState(false)
+    const {navigateHome} = useAppNavigate()
 
-    console.log(state)
+    useEffect(() => {
+        setChatroomUUID(state.chatroomId)
+    }, [state])
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {
             console.log("WebSocket connection established.");
             sendJsonMessage({
-                topic: "createChatroom",
-                payload: {},
+                topic: "helperEnteredChatroom",
+                payload: {
+                    chatroomUUID
+                },
             });
         },
         onClose: () => { },
         onMessage: (event) => {
             console.log(event)
             switch (event.topic) {
-                case 'GAIN_ACCESS':
-                    const { chatroomUuid } = JSON.parse(event.data);
-                    setChatroomUUID(event.chatroomUuid)
-                    break;
                 case 'MESSAGE':
                     const { message } = JSON.parse(event.data);
 
@@ -51,6 +54,11 @@ const ChatSectionHelper = () => {
                     }
 
                     dispatch(addMessage(messageObj))
+                    break;
+                case 'CLOSE_ROOM':
+
+                    setDisconnected(true)
+                    break;
                 default:
             }
         },
@@ -82,7 +90,16 @@ const ChatSectionHelper = () => {
     return (
         <div className="chat_view">
             <Chat handleSend={handleSend} />
-            <ChatNav />
+            <ChatNav type="helper" />
+            <Modal
+                open={disconnected}
+                footer={null}
+                closable={false}
+                width="80%"
+            >
+                <header>Twój rozmówca się rozłączył</header>
+                <MyButton title="Powrót do strony głównej" type="regular" onClick={navigateHome}/>
+            </Modal>
         </div>
     )
 }
