@@ -1,55 +1,78 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Switch } from 'antd';
 import MyButton from 'components/Button/Button';
-import { useState } from 'react';
+import { register, selectUser, signIn } from 'features/currentUser/currentUserSlice';
+import { useAppNavigate } from 'hooks/useAppNavigate';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-const LoginForm = ({mode}) => {
+const LoginForm = ({ mode }) => {
   const [checked, setChecked] = useState(true);
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+  const {navigateDashboard} = useAppNavigate()
 
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+  useEffect(() => {
+    if (user.status === "succeeded") {
+      console.log(user.token)
+      localStorage.setItem('token', user.token);
+      navigateDashboard();
+    }
+
+  },[user])
+
+  const onLogin = (values) => {
+    dispatch(signIn(values))
+  };
+
+  const onRegister = (values) => {
+    if (values.password !== values.repeatPassword) {
+      alert("Hasla nie sa takie same")
+      return;
+    }
+    dispatch(register(values))
   };
 
   if (mode == "login") return (
     <Form
-    name="normal_login"
-    className="login-form"
-    initialValues={{
-      remember: true,
-    }}
-    onFinish={onFinish}
-  >
-    <h1>Logowanie</h1>
-    <Form.Item
-      name="username"
-      rules={[
-        {
-          required: true,
-          message: 'Wprowadz adres Email',
-        },
-      ]}
+      name="normal_login"
+      className="login-form"
+      initialValues={{
+        remember: true,
+      }}
+      onFinish={onLogin}
     >
-      <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Wprowadz adres Email" />
-    </Form.Item>
-    <Form.Item
-      name="password"
-      rules={[
-        {
-          required: true,
-          message: 'Wprowdz haslo',
-        },
-      ]}
-    >
-      <Input
-        prefix={<LockOutlined className="site-form-item-icon" />}
-        type="password"
-        placeholder="Wprowdz haslo"
-      />
-    </Form.Item>
-    <Form.Item>
-      <MyButton title="Zaloguj" type="big" />
-    </Form.Item>
-  </Form>
+      <h1>Logowanie</h1>
+      <Form.Item
+        name="login"
+        rules={[
+          {
+            required: true,
+            message: 'Wprowadz adres Email',
+          },
+        ]}
+      >
+        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Wprowadz adres Email" />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[
+          {
+            required: true,
+            message: 'Wprowdz haslo',
+          },
+        ]}
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Wprowdz haslo"
+        />
+      </Form.Item>
+      <Form.Item>
+        <MyButton title="Zaloguj" type="big" />
+      </Form.Item>
+    </Form>
   )
 
   return (
@@ -59,7 +82,7 @@ const LoginForm = ({mode}) => {
       initialValues={{
         remember: true,
       }}
-      onFinish={onFinish}
+      onFinish={onRegister}
     >
       <h1>Rejestracja</h1>
 
@@ -88,7 +111,7 @@ const LoginForm = ({mode}) => {
       </Form.Item>
 
       <Form.Item
-        name="username"
+        name="login"
         rules={[
           {
             required: true,
@@ -134,28 +157,40 @@ const LoginForm = ({mode}) => {
       <Form.Item>
         <MyButton title="Zaloguj" type="big" />
       </Form.Item>
-      
-      <Form.Item
-      name="terms"
-      valuePropName="checked"
-      wrapperCol={{
-        offset: 8,
-        span: 16,
-      }}
-    >
-      <Checkbox>Zapoznałem się i akceptuje warunki regulaminu</Checkbox>
-    </Form.Item>
 
-    <Form.Item
-      name="agreeData"
-      valuePropName="checked"
-      wrapperCol={{
-        offset: 8,
-        span: 16,
-      }}
-    >
-      <Checkbox>Wyrażam zgodę na przetwarzanie moich danych</Checkbox>
-    </Form.Item>
+      <Form.Item
+        name="terms"
+        valuePropName="checked"
+        rules={[
+          {
+            required: true,
+            message: 'Musisz wyrazić zgodę',
+          },
+        ]}
+        wrapperCol={{
+          offset: 8,
+          span: 16,
+        }}
+      >
+        <Checkbox>Zapoznałem się i akceptuje warunki regulaminu</Checkbox>
+      </Form.Item>
+
+      <Form.Item
+        name="agreeData"
+        valuePropName="checked"
+        rules={[
+          {
+            required: true,
+            message: 'Musisz wyrazić zgodę',
+          },
+        ]}
+        wrapperCol={{
+          offset: 8,
+          span: 16,
+        }}
+      >
+        <Checkbox>Wyrażam zgodę na przetwarzanie moich danych</Checkbox>
+      </Form.Item>
 
     </Form>
   );
