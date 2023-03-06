@@ -13,13 +13,21 @@ import { v4 as uuid } from 'uuid'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from 'features/API';
+import {useLocation} from "react-router";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const ChatSection = () => {
-    const [chatroomUUID, setChatroomUUID] = useState("");
+    const { state } = useLocation();
+    const [chatroomUUID, setChatroomUUID] = useState(state.chatroomId);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const {navigateHome} = useAppNavigate();
+
+    useEffect(() => {
+        console.log(state);
+        setChatroomUUID(state.chatroomId)
+    }, [state])
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {
@@ -33,25 +41,35 @@ const ChatSection = () => {
         },
         onClose: () => { },
         onMessage: (event) => {
-            console.log(event)
-            switch (event.topic) {
+
+            const res = JSON.parse(event.data);
+            let ret;
+            try {
+                ret = JSON.parse(res.payload);
+            } catch (exc) {
+                return;
+            }
+
+
+            switch (res.topic) {
                 case 'GAIN_ACCESS':
-                    const { chatroomUuid } = JSON.parse(event.data);
-                    setChatroomUUID(chatroomUuid)
+                    setChatroomUUID(ret.chatroomUuid)
                     break;
+
                 case 'MESSAGE':
-                    const { message } = JSON.parse(event.data);
 
                     const messageObj = {
                         messageId: uuid(),
-                        content: message,
-                        from: 'helper'
+                        content: ret.message,
+                        from: (ret.sender === 'HELP_GIVER') ? 'helper' : 'seeker',
                     }
 
-                    dispatch(addMessage(messageObj))
+                    dispatch(addMessage(messageObj));
                     break;
-                case 'HELPER_ENTERED':
 
+                case 'HELPER_ENTERED':
+                    setChatroomUUID(ret.chatroomUuid);
+                    break;
                 default:
             }
         },
@@ -72,7 +90,7 @@ const ChatSection = () => {
             const messageObj = {
                 messageId: uuid(),
                 content: currentMessage,
-                from: user.userType
+                from: 'seeker'
             }
 
             dispatch(addMessage(messageObj, chatroomUUID))

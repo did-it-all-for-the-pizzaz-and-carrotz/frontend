@@ -19,12 +19,13 @@ import GoBack from 'components/GoBack/GoBack';
 const { Header, Content, Footer, Sider } = Layout;
 
 const ChatSectionHelper = () => {
-    const { state } = useLocation()
+
+    const [disconnected, setDisconnected] = useState(false)
+    const { state } = useLocation();
     const [chatroomUUID, setChatroomUUID] = useState(state.chatroomId);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const [disconnected, setDisconnected] = useState(false)
-    const {navigateHome} = useAppNavigate()
+    const {navigateHome} = useAppNavigate();
 
     useEffect(() => {
         setChatroomUUID(state.chatroomId)
@@ -36,21 +37,27 @@ const ChatSectionHelper = () => {
             sendJsonMessage({
                 topic: "helperEnteredChatroom",
                 payload: {
-                    chatroomUUID
+                    chatroomUuid: chatroomUUID
                 },
             });
         },
         onClose: () => { },
         onMessage: (event) => {
-            console.log(event)
+            const res = JSON.parse(event.data);
+
             switch (event.topic) {
+                case 'GAIN_ACCESS':
+                    setChatroomUUID(res.payload.chatroomUuid)
+                    break;
+
                 case 'MESSAGE':
+                    console.log(event);
                     const { message } = JSON.parse(event.data);
 
                     const messageObj = {
                         messageId: uuid(),
-                        content: message,
-                        from: 'helper'
+                        content: res.payload.message,
+                        from: 'seeker'
                     }
 
                     dispatch(addMessage(messageObj))
@@ -67,7 +74,6 @@ const ChatSectionHelper = () => {
 
     const handleSend = (currentMessage) => {
         if (currentMessage.length > 0) {
-            console.log(currentMessage);
             sendJsonMessage({
                 topic: "MESSAGE",
                 payload: {
@@ -79,7 +85,7 @@ const ChatSectionHelper = () => {
             const messageObj = {
                 messageId: uuid(),
                 content: currentMessage,
-                from: user.userType
+                from: 'seeker'
             }
 
             dispatch(addMessage(messageObj, chatroomUUID))
@@ -90,16 +96,7 @@ const ChatSectionHelper = () => {
     return (
         <div className="chat_view">
             <Chat handleSend={handleSend} />
-            <ChatNav type="helper" />
-            <Modal
-                open={disconnected}
-                footer={null}
-                closable={false}
-                width="80%"
-            >
-                <header>Twój rozmówca się rozłączył</header>
-                <MyButton title="Powrót do strony głównej" type="regular" onClick={navigateHome}/>
-            </Modal>
+            <ChatNav />
         </div>
     )
 }

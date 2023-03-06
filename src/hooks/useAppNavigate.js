@@ -5,8 +5,8 @@ export const useAppNavigate = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const startNewChat = () => {
-        navigate('/chat')
+    const startNewChat = (chatroomId) => {
+        navigate('/chat', { state: { chatroomId } })
     }
 
     const navigateHome = () => {
