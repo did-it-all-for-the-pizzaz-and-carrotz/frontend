@@ -25,7 +25,9 @@ const Chat = () => {
       console.log("WebSocket connection established.");
       sendJsonMessage({
         topic: "createChatroom",
-        payload: {},
+        payload: {
+            "age": "ADULT"
+        },
       });
     },
     onClose: () => {},

@@ -8,12 +8,39 @@ import { useAppNavigate } from 'hooks/useAppNavigate'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice'
 import { Navigate } from 'react-router-dom'
 import {logOut} from 'features/currentUser/currentUserSlice'
+import useWebSocket from "react-use-websocket";
 
 const Dashboard = () => {
     const rooms = useSelector(selectRooms)
     const {navigateHome} = useAppNavigate()
     const user = useSelector(selectUser)
     const dispatch = useDispatch()
+    const WS_URL = "ws://127.0.0.1:8081";
+
+    const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
+        onOpen: () => {
+            console.log("WebSocket connection established.");
+            sendJsonMessage({
+                topic: "helperLogin",
+                payload: {},
+            });
+        },
+        onClose: () => {
+            sendJsonMessage({
+                topic: "helperLogout",
+                payload: {},
+            });
+        },
+        onMessage: (event) => {
+            const { payload, topic } = JSON.parse(event.data);
+            console.log(event);
+            switch(topic) {
+                case "FETCH_ROOMS":
+                    console.log(payload);
+                    break;
+            }
+        },
+    });
 
     if (user.userType !== "helper") return (
         <Navigate replace to="/home" />
