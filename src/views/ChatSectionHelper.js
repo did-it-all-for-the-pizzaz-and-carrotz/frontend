@@ -26,7 +26,6 @@ const { Header, Content, Footer, Sider } = Layout;
 const ChatSectionHelper = () => {
   const [disconnected, setDisconnected] = useState(false);
   const { state } = useLocation();
-  console.log("#1", state);
   const [chatroomUUID, setChatroomUUID] = useState(state.chatroomId);
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
@@ -49,20 +48,24 @@ const ChatSectionHelper = () => {
     onClose: () => {},
     onMessage: (event) => {
       const res = JSON.parse(event.data);
+      let ret;
 
-      switch (event.topic) {
+      if (typeof res.payload === "string") {
+        ret = JSON.parse(res.payload);
+      } else {
+        ret = res.payload;
+      }
+
+      switch (res.topic) {
         case "GAIN_ACCESS":
           setChatroomUUID(res.payload.chatroomUuid);
           break;
 
         case "MESSAGE":
-          console.log(event);
-          const { message } = JSON.parse(event.data);
-
           const messageObj = {
             messageId: uuid(),
-            content: res.payload.message,
-            from: "seeker",
+            content: ret.message,
+            from: "giver",
           };
 
           dispatch(addMessage(messageObj));

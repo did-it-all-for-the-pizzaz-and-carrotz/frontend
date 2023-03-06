@@ -50,7 +50,7 @@ const ChatSection = () => {
 
       switch (res.topic) {
         case "GAIN_ACCESS":
-          setChatroomUUID(ret.chatroomUuid);
+          setChatroomUUID(ret.chatroomUUID);
           break;
 
         case "MESSAGE":
@@ -63,9 +63,6 @@ const ChatSection = () => {
           dispatch(addMessage(messageObj));
           break;
 
-        case "HELPER_ENTERED":
-          setChatroomUUID(ret.chatroomUuid);
-          break;
         default:
       }
     },
@@ -74,6 +71,7 @@ const ChatSection = () => {
   const handleSend = (currentMessage) => {
     if (currentMessage.length > 0) {
       console.log(currentMessage);
+      console.log(chatroomUUID);
       sendJsonMessage({
         topic: "MESSAGE",
         payload: {
