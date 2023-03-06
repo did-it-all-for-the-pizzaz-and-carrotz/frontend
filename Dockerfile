@@ -1,13 +1,8 @@
-FROM node:14.9
-
+FROM node:16-alpine as build-step
 WORKDIR /app
-
 ENV PATH /app/node_modules/.bin:$PATH
-
 COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-
-COPY . ./
-
-CMD ["npm", "start"]
+COPY ./src ./src
+COPY ./public ./public
+RUN yarn install
+RUN yarn build
