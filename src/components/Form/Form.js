@@ -1,4 +1,4 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Switch } from 'antd';
 import MyButton from 'components/Button/Button';
 import { register, selectUser, signIn } from 'features/currentUser/currentUserSlice';
@@ -52,7 +52,7 @@ const LoginForm = ({ mode }) => {
           },
         ]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Wprowadz adres Email" />
+        <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Wprowadz adres Email" />
       </Form.Item>
       <Form.Item
         name="password"
@@ -119,7 +119,7 @@ const LoginForm = ({ mode }) => {
           },
         ]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Wprowadz adres Email" />
+        <Input prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Wprowadz adres Email" />
       </Form.Item>
 
       <Form.Item
@@ -154,10 +154,6 @@ const LoginForm = ({ mode }) => {
         />
       </Form.Item>
 
-      <Form.Item>
-        <MyButton title="Zaloguj" type="big" />
-      </Form.Item>
-
       <Form.Item
         name="terms"
         valuePropName="checked"
@@ -190,6 +186,10 @@ const LoginForm = ({ mode }) => {
         }}
       >
         <Checkbox>Wyrażam zgodę na przetwarzanie moich danych</Checkbox>
+      </Form.Item>
+
+      <Form.Item>
+        <MyButton title="Zaloguj" type="big" />
       </Form.Item>
 
     </Form>

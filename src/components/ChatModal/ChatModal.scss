@@ -1,0 +1,16 @@
+.chat_modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: white;
+
+    p {
+        text-align: center;
+    }
+
+    h3 {
+        font-size:30px;
+    }
+
+}

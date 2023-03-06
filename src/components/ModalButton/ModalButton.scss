@@ -1,0 +1,27 @@
+.modal_button_light {
+    border-radius: 50px;
+    background-color: #FFFFFF80;
+    font-size:18px;
+    height: 80px;
+    width:300px;
+    box-shadow: "0px 2px 12px #4F4F4F60";
+    margin-bottom:20px;
+    cursor: pointer;
+
+    span {
+        margin-right: 10px;
+    }
+}
+
+.modal_button_dark {
+    border-radius: 50px;
+    background-color: #FFFFFF80;
+    font-size:18px;
+    height: 80px;
+    width:300px;
+    box-shadow: "0px 2px 12px #4F4F4F60";
+    margin-bottom:20px;
+    
+    cursor: pointer;
+
+}

@@ -18,6 +18,8 @@ import { selectUser, setUser } from "features/currentUser/currentUserSlice";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "features/API";
 import { useLocation } from "react-router";
+import ChatModal from "components/ChatModal/ChatModal";
+import "./ChatSection.scss";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -25,6 +27,7 @@ const ChatSection = () => {
   const [chatroomUUID, setChatroomUUID] = useState();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
+  const [showChatbotModal, setShowChatbotModal] = useState(true);
   const { navigateHome } = useAppNavigate();
 
   const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
@@ -94,6 +97,11 @@ const ChatSection = () => {
     <div className="chat_view">
       <Chat handleSend={handleSend} />
       <ChatNav />
+      <ChatModal
+        open={showChatbotModal}
+        onClickFirst={() => setShowChatbotModal(false)}
+        onClickSecond={navigateHome}
+      />
     </div>
   );
 };

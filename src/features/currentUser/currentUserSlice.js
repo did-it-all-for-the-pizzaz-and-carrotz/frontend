@@ -6,6 +6,7 @@ import { getUser, registerUser } from './currentUserAPI';
 const initialState = {
     userType: 'seeker',
     status: 'idle',
+    age: 'UNKNOWN',  //ADULT UNKNOWN
     token: ''
 }
 
@@ -43,6 +44,12 @@ export const currentUserSlice = createSlice({
                 status: 'idle',
                 token: ''
             }
+        },
+        setUserAge: (state, action) => {
+            return {
+                ...state,
+                age: action.payload.age,
+            }
         }
     },
     extraReducers: (builder) => {
@@ -72,7 +79,7 @@ export const currentUserSlice = createSlice({
     },
 })
 
-export const { setUser, logOut } = currentUserSlice.actions
+export const { setUser, logOut, setUserAge } = currentUserSlice.actions
 
 export const selectUser = (state) => state.user;
 

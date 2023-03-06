@@ -1,4 +1,3 @@
-import "./ChatSection.scss";
 import Chat from "containers/Chat/Chat";
 import {
   UploadOutlined,
@@ -17,9 +16,9 @@ import { v4 as uuid } from "uuid";
 import { selectUser, setUser } from "features/currentUser/currentUserSlice";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "features/API";
-import { useLocation, useNavigation } from "react-router";
-
+import { useLocation } from "react-router";
 import GoBack from "components/GoBack/GoBack";
+import "./ChatSection.scss";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -30,6 +29,7 @@ const ChatSectionHelper = () => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const { navigateHome } = useAppNavigate();
+  const { messages } = useSelector(selectMessages);
 
   useEffect(() => {
     setChatroomUUID(state.chatroomId);

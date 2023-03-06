@@ -20,7 +20,7 @@ const AppProviders = ({ children }) => {
                     }
                 })
                 if (response.status === 200) {
-                    dispatch(setUser('helper'))
+                    dispatch(setUser({userType:"helper"}))
                 }
 
             } catch (e) {
