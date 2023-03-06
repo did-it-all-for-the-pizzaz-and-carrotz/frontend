@@ -9,55 +9,17 @@ import { v4 as uuid } from 'uuid'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 import useWebSocket from "react-use-websocket";
 
+const Chat = ({ handleSend }) => {
+    const [currentMessage, setCurrentMessage] = useState("");
+    const [participient, setParticipient] = useState('Freddie Mercury');
+    const messages = useSelector(selectMessages);
+    const dispatch = useDispatch();
+    const user = useSelector(selectUser);
 
-const Chat = () => {
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [chatroomUUID, setChatroomUUID] = useState("");
-  const [participient, setParticipient] = useState('Freddie Mercury');
-  const messages = useSelector(selectMessages);
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
 
-  const WS_URL = "ws://127.0.0.1:8081";
-
-  const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
-    onOpen: () => {
-      console.log("WebSocket connection established.");
-      sendJsonMessage({
-        topic: "createChatroom",
-        payload: {
-            "age": "ADULT"
-        },
-      });
-    },
-    onClose: () => {},
-    onMessage: (event) => {
-      const { chatroomUUID } = JSON.parse(event.data);
-      setChatroomUUID(chatroomUUID); // TODO set it in reducer to persist state after dispatch
-    },
-  });
-
-    const handleSend = () => {
-        if (currentMessage.length > 0) {
-            console.log(currentMessage);
-            sendJsonMessage({
-                topic: "onMessage",
-                payload: {
-                    chatroomUuid: chatroomUUID,
-                    message: currentMessage,
-                },
-            });
-
-            const message = {
-                messageId: Math.random(),
-                date: '29/02/2023', // TODO TO DO
-                content: currentMessage,
-                from: 'seeker'
-            }
-
-            dispatch(addMessage(message, chatroomUUID))
-            setCurrentMessage('')
-        }
+    const handleSendMessage = () => {
+        handleSend(currentMessage)
+        setCurrentMessage('')
     }
 
     useEffect(() => {
@@ -72,10 +34,10 @@ const Chat = () => {
         <div className="chat">
             <div
                 style={{
-                    position:"absolute",
-                    top:"20px",
-                    right:"20px",
-                    cursor:"pointer"
+                    position: "absolute",
+                    top: "20px",
+                    right: "20px",
+                    cursor: "pointer"
                 }}
                 onClick={
                     () => {
@@ -114,7 +76,7 @@ const Chat = () => {
                     value={currentMessage}
                     onChange={(e) => setCurrentMessage(e.target.value)}
                 />
-                <div className="chat_send" onClick={handleSend}>
+                <div className="chat_send" onClick={handleSendMessage}>
                     <SendOutlined />
                 </div>
             </div>

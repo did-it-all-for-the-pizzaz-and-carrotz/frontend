@@ -1,22 +1,27 @@
 import axios from 'axios'
 import { apiURL } from 'features/API'
+import { setUser } from 'features/currentUser/currentUserSlice'
 import React, { Children, useEffect } from 'react'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { store } from 'store/store'
 
 const AppProviders = ({ children }) => {
+    const dispatch = useDispatch()
+
     useEffect(() => {
         (async () => {
             const token = localStorage.getItem('token')
 
             try {
-                const response = await axios.get(apiURL + "/sample/test", {
+                const response = await axios.get(apiURL + "/user", {
                     headers: {
-                        authorisation: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`
                     }
                 })
-                console.log(response)
+                if (response.status === 200) {
+                    dispatch(setUser('helper'))
+                }
 
             } catch (e) {
                 console.log(e)

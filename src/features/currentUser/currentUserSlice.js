@@ -13,7 +13,7 @@ export const signIn = createAsyncThunk(
     'currentUser/signIn',
     async (loginData) => {
         const response = await getUser(loginData);
-        console.log(response)
+        console.log("currentUserSlice",response)
         return response.data;
     }
 );
@@ -32,7 +32,10 @@ export const currentUserSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            return action.payload
+            return {
+                ...state,
+                userType: action.payload,
+            }
         },
         logOut: (state) => {
             return {
@@ -50,7 +53,6 @@ export const currentUserSlice = createSlice({
             .addCase(signIn.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.userType = 'helper';
-                console.log(action)
                 state.token = action.payload.token;
             })
             .addCase(signIn.rejected, (state, action) => {
