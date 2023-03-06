@@ -22,14 +22,14 @@ export const roomsSlice = createSlice({
             return [
                 ...state,
                 {
-                    roomId: action.payload,
-                    messages: [],
+                    roomId: action.payload.chatroomUuid,
+                    messages: "",
                     isAdult: false,
                 }
             ] 
-        },
+        }, 
         removeChatroom: (state, action) => {
-            return state.filter(({roomId}) =>  roomId !== action.payload )
+            return state.filter(({roomId}) =>  roomId !== action.payload.chatroomUuid )
         }
     }
 })

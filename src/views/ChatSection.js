@@ -21,8 +21,44 @@ const ChatSection = () => {
     const [chatroomUUID, setChatroomUUID] = useState("");
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const [showChatbotModal, setShowChatbotModal] = useState(true)
-    const {navigateHome} = useAppNavigate()
+    const [showChatbotModal, setShowChatbotModal] = useState(false)
+    const { navigateHome } = useAppNavigate()
+    const [isHelpGiverPresent, setIsHelpGiverPresent] = useState(false)
+    const [isAssistantPresent, setIsAssistantPresent] = useState(false)
+    const [label, setLabel] = useState("Oczekiwanie...")
+
+
+    useEffect(() => {
+        if (!isHelpGiverPresent && !isAssistantPresent) {
+            setLabel("Oczekiwanie...")
+        }
+        else if (isHelpGiverPresent) {
+            setLabel("Rozmawiasz z naszym specjalistą")
+        }
+        else if (isAssistantPresent) {
+            setLabel("Rozmawiasz z naszym wirtualnym asystentem")
+        }
+    }, [isHelpGiverPresent, isAssistantPresent])
+
+    let timer;
+    useEffect(() => {
+        if (!isHelpGiverPresent && !isAssistantPresent) {
+            timer = setTimeout(() => {
+                console.log("I will request assistant", chatroomUUID);
+    
+                setShowChatbotModal(true);
+            }, 15000);
+        }
+    }, [])
+
+    const agreeForAssistant = () => {
+        setShowChatbotModal(false)
+        setIsAssistantPresent(true);
+            sendJsonMessage({
+                topic: "requestAssistant",
+                payload: { chatroomUuid: chatroomUUID },
+            });
+    }
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {
@@ -36,25 +72,49 @@ const ChatSection = () => {
         },
         onClose: () => { },
         onMessage: (event) => {
-            console.log(event)
-            switch (event.topic) {
+            const res = JSON.parse(event.data);
+            let ret;
+
+            if (typeof res.payload === "string") {
+                ret = JSON.parse(res.payload);
+              } else {
+                ret = res.payload;
+              }
+
+            console.log("onMessage",event )
+            switch (res.topic) {
                 case 'GAIN_ACCESS':
-                    const { chatroomUuid } = JSON.parse(event.data);
-                    setChatroomUUID(chatroomUuid)
+                    // const { chatroomUuid } = JSON.parse(event.data);
+                    setChatroomUUID(ret.chatroomUUID);
                     break;
                 case 'MESSAGE':
-                    const { message } = JSON.parse(event.data);
 
                     const messageObj = {
                         messageId: uuid(),
-                        content: message,
-                        from: 'helper'
+                        content: res.message,
+                        // from: ret.sender === "HELP_GIVER" ? "helper" : "seeker",
+                        from: "helper"
                     }
 
                     dispatch(addMessage(messageObj))
                     break;
                 case 'HELPER_ENTERED':
-
+                    setIsHelpGiverPresent(true);
+                    setIsAssistantPresent(false)
+                    break;
+                case 'HELPER_LEFT':
+                    setIsHelpGiverPresent(false);
+                    setIsAssistantPresent(true)
+                    break;
+                case "ASSISTANT_ENTER":
+                    if (ret.sender === "ASSISTANT") {
+                        clearInterval(timer)
+                        dispatch(addMessage({
+                            from: ret.sender,
+                            content: ret.message
+                        }))
+                    }
+                    break;
                 default:
             }
         },
@@ -85,11 +145,14 @@ const ChatSection = () => {
 
     return (
         <div className="chat_view">
-            <Chat handleSend={handleSend} />
+            <Chat
+                handleSend={handleSend}
+                label={label}
+            />
             <ChatNav />
             <ChatModal
                 open={showChatbotModal}
-                onClickFirst={() => setShowChatbotModal(false)}
+                onClickFirst={agreeForAssistant}
                 onClickSecond={navigateHome}
             />
         </div>

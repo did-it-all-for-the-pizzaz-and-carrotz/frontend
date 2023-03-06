@@ -9,9 +9,8 @@ import { v4 as uuid } from 'uuid'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 import useWebSocket from "react-use-websocket";
 
-const Chat = ({ handleSend }) => {
+const Chat = ({ handleSend, label }) => {
     const [currentMessage, setCurrentMessage] = useState("");
-    const [participient, setParticipient] = useState('Freddie Mercury');
     const messages = useSelector(selectMessages);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
@@ -32,27 +31,8 @@ const Chat = ({ handleSend }) => {
 
     return (
         <div className="chat">
-            <div
-                style={{
-                    position: "absolute",
-                    top: "20px",
-                    right: "20px",
-                    cursor: "pointer"
-                }}
-                onClick={
-                    () => {
-                        const nextUser = user.userType === 'seeker' ? 'helper' : 'seeker'
-                        dispatch(setUser({
-                            userType: nextUser
-                        }))
-                    }
-                }
-            >
-                Zmien usera
-            </div>
-
             <header className="chat_header">
-                Rozmawiasz z {participient}
+                {label}
             </header>
 
             <div className="chat_talk_wrapper">

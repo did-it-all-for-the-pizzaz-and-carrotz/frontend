@@ -18,6 +18,9 @@ const LoginForm = ({ mode }) => {
       console.log(user.token)
       navigateDashboard();
     }
+    if (user.status === "failed") {
+      alert("Nie udało sie zalogować")
+    }
 
   },[user])
 

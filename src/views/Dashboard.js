@@ -1,5 +1,5 @@
 import GoBack from 'components/GoBack/GoBack'
-import { selectRooms } from 'features/rooms/roomsSlice'
+import { addChatroom, removeChatroom, selectRooms } from 'features/rooms/roomsSlice'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './Dashboard.scss'
@@ -20,17 +20,13 @@ const Dashboard = () => {
     const { navigateHome } = useAppNavigate()
     const user = useSelector(selectUser)
     const dispatch = useDispatch()
-    const {navigateHelperChat} = useAppNavigate()
+    const { navigateHelperChat } = useAppNavigate()
 
     const rooms = useSelector(selectRooms)
 
 
-    useEffect(() => {
-        console.log(rooms)
-    },[rooms])
-
     const openChatroom = (chatroomID) => {
-        console.log("dashboard openChatroom",chatroomID)
+        console.log("dashboard openChatroom", chatroomID)
         navigateHelperChat(chatroomID)
     }
 
@@ -50,10 +46,18 @@ const Dashboard = () => {
         },
         onMessage: (event) => {
             const { payload, topic } = JSON.parse(event.data);
-            console.log(payload);
-            switch(topic) {
+            console.log("Payload",payload);
+            switch (topic) {
                 case "FETCH_ROOMS":
                     dispatch(setChatrooms(payload))
+                    break;
+                case "REMOVE_FREE_ROOM":
+                    console.log("removeFreeRoom")
+                    dispatch(removeChatroom(payload))
+                    break;
+                case "ADD_FREE_ROOM":
+                    console.log("addFreeRoom")
+                    dispatch(addChatroom(payload))
                     break;
             }
         },
@@ -99,7 +103,7 @@ const Dashboard = () => {
                             date={date}
                             content={title}
                             isAdult={age}
-                            onClick={()=> openChatroom(chatroomUUID)}
+                            onClick={() => openChatroom(chatroomUUID)}
                         />
                     ))}
                 </div>
