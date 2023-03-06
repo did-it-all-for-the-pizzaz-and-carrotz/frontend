@@ -16,6 +16,7 @@ const Chat = ({ handleSend }) => {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
 
+
     const handleSendMessage = () => {
         handleSend(currentMessage)
         setCurrentMessage('')

@@ -6,6 +6,7 @@ import './Dashboard.scss'
 import RoomCard from 'components/RoomCard/RoomCard'
 import { useAppNavigate } from 'hooks/useAppNavigate'
 import { selectUser, setUser } from 'features/currentUser/currentUserSlice'
+
 import { Navigate, useNavigate } from 'react-router-dom'
 import { logOut } from 'features/currentUser/currentUserSlice'
 import useWebSocket from "react-use-websocket";
@@ -14,28 +15,44 @@ import { UserOutlined, LogoutOutlined } from '@ant-design/icons'
 
 const WS_URL = "ws://127.0.0.1:8081";
 
+import { Navigate } from 'react-router-dom'
+import {logOut} from 'features/currentUser/currentUserSlice'
+import useWebSocket from "react-use-websocket";
+
+
 const Dashboard = () => {
     // const { sendJsonMessage } = useSocket()
     const { navigateHome } = useAppNavigate()
     const user = useSelector(selectUser)
     const dispatch = useDispatch()
+
     const rooms = useSelector(selectRooms)
+
+    const WS_URL = "ws://127.0.0.1:8081";
+
 
     const { sendJsonMessage, getWebSocket, onMessage } = useWebSocket(WS_URL, {
         onOpen: () => {
             console.log("WebSocket connection established.");
             sendJsonMessage({
-                topic: "createChatroom",
+                topic: "helperLogin",
                 payload: {},
             });
         },
-        onClose: () => { },
+        onClose: () => {
+            sendJsonMessage({
+                topic: "helperLogout",
+                payload: {},
+            });
+        },
         onMessage: (event) => {
-            const { chatroomUUID } = JSON.parse(event.data);
-            // setChatroomUUID(chatroomUUID); // TODO set it in reducer to persist state after dispatch
-
-            dispatch(setChatroom(chatroomUUID))
-
+            const { payload, topic } = JSON.parse(event.data);
+            console.log(event);
+            switch(topic) {
+                case "FETCH_ROOMS":
+                    console.log(payload);
+                    break;
+            }
         },
     });
 
