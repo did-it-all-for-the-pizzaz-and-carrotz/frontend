@@ -85,14 +85,17 @@ const ChatSection = () => {
             switch (res.topic) {
                 case 'GAIN_ACCESS':
                     // const { chatroomUuid } = JSON.parse(event.data);
-                    console.log(ret)
+                    // const newData = JSON.parse(res.data)
+                    console.log("ret",ret)
                     setChatroomUUID(ret.chatroomUuid);
                     break;
                 case 'MESSAGE':
-
+                    const a = JSON.parse(res.payload);
+                    console.log(a)
+                    const message ="";
                     const messageObj = {
                         messageId: uuid(),
-                        content: res.message,
+                        content: a.message,
                         // from: ret.sender === "HELP_GIVER" ? "helper" : "seeker",
                         from: "helper"
                     }
