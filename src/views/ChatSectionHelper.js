@@ -1,4 +1,3 @@
-import './ChatSection.scss'
 import Chat from 'containers/Chat/Chat'
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout, Menu, Modal, Space, theme } from 'antd';
@@ -15,6 +14,7 @@ import useWebSocket from "react-use-websocket";
 import { WS_URL } from 'features/API';
 import { useLocation } from 'react-router';
 import GoBack from 'components/GoBack/GoBack';
+import './ChatSection.scss'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -43,7 +43,7 @@ const ChatSectionHelper = () => {
             sendJsonMessage({
                 topic: "helperEnteredChatroom",
                 payload: {
-                    chatroomUUID
+                    chatroomUUID,
                 },
             });
         },

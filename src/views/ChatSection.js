@@ -1,4 +1,3 @@
-import './ChatSection.scss'
 import Chat from 'containers/Chat/Chat'
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
@@ -14,6 +13,7 @@ import { selectUser, setUser } from 'features/currentUser/currentUserSlice';
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from 'features/API';
 import ChatModal from 'components/ChatModal/ChatModal';
+import './ChatSection.scss'
 
 const { Header, Content, Footer, Sider } = Layout;
 

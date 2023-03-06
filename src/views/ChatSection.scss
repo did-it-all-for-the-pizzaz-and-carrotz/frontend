@@ -6,4 +6,14 @@
     grid-template-columns: 1fr 300px;
     grid-template-rows: 1fr;
     min-height: 100%;
+    
+    @media screen and (max-width:800px) {
+        
+        grid-template-columns: 1fr;
+    
+        .chat_view_navbar {
+            display:none;
+        }
+    
+    }
 }
